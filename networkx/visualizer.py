@@ -1,8 +1,10 @@
 import sqlite3
 import os
 import networkx as nx
+import igraph as ig
 import matplotlib.pyplot as plt
-from element import edgeEvent
+from element import edgeEvent,TP_edgeEvent
+import math
 
 
 current_directory_path=os.getcwd() # 현재 작업 경로
@@ -69,7 +71,84 @@ class Visualizer:
         nx.draw_networkx_edges(G, pos,edge_color='black',width=1,alpha=0.1)
         
         plt.show()
+    
+    def tree_visualize(self,start_time,end_time):
         
+        con=sqlite3.connect(db_path+"\\"+self.file_name+".db")
+        cur=con.cursor()
+        
+        # load edge event
+        rows=cur.execute("select * from tpEdgeEvent").fetchall()
+        tp_edge_event_list=[]
+        for row in rows:
+            
+            if row[3]<start_time:
+                continue
+            
+            if row[3]>end_time:
+                break
+            
+            
+            if row[1]!=row[2]:
+                tp_edge_event_list.append(TP_edgeEvent(row[0],row[1],row[2],row[3]))
+
+        cur.close()
+        con.close()
+        
+        # create 
+        G=ig.Graph()
+        
+        vertex_set=set()
+        vertex_index_dic={}
+        
+        
+        for event in tp_edge_event_list:
+            vertex_set.add(event.sourceEID)
+            vertex_set.add(event.targetEID)
+        
+        for vertex_id in vertex_set:
+            G.add_vertex(name=vertex_id)
+            vertex_index_dic[vertex_id]=-1
+        
+        for event in tp_edge_event_list:
+            G.add_edge(event.sourceEID,event.targetEID)
+        
+        
+        for key in vertex_index_dic.keys():
+            for v in G.vs:
+                if v["name"]==key:
+                    vertex_index_dic[key]=v.index
+        
+        
+        root_name="a|0"
+        root_index=-1
+        for v in G.vs:
+            if v["name"] == root_name:
+                root_index=v.index
+        
+        my_layout=G.layout_reingold_tilford(root=[root_index])
+        my_layout.rotate(270)
+        
+        
+        
+        print(my_layout.coords)
+        print()
+        print(vertex_index_dic)
+        
+        
+        
+    
+        
+        fig, ax = plt.subplots(figsize=(10,6))
+        ig.plot(
+            G, 
+            target=ax,
+            layout=my_layout,
+            vertex_size=2,
+            edge_width="1"
+            )
+        
+        plt.show()
         
         
         
