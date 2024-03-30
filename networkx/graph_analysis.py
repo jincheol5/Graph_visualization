@@ -49,11 +49,20 @@ class Analyzer:
         # 각 노드의 degree(연결된 엣지의 개수)를 계산
         degrees = dict(G.degree())
 
+        # degree를 기준으로 내림차순 정렬
+        sorted_nodes = sorted(degrees, key=lambda x: degrees[x], reverse=True)
+
         # degree를 기준으로 가장 많은 엣지를 가진 노드를 찾음
-        max_degree_node = max(degrees, key=degrees.get)
+        max_degree_node = sorted_nodes[0]
+        second_degree_node=sorted_nodes[1]
+        third_degree_node=sorted_nodes[3]
 
 
         print("node의 수: ", G.number_of_nodes())
         print("edge의 수: ",G.number_of_edges())
         print("가장 많은 엣지를 가진 노드:", max_degree_node)
         print("연결된 엣지의 개수:", degrees[max_degree_node])
+        print("두번째로 많은 엣지를 가진 노드:", second_degree_node)
+        print("연결된 엣지의 개수:", degrees[second_degree_node])
+        print("세번째로 많은 엣지를 가진 노드:", third_degree_node)
+        print("연결된 엣지의 개수:", degrees[third_degree_node])
