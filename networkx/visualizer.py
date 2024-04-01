@@ -3,7 +3,7 @@ import os
 import networkx as nx
 import igraph as ig
 import matplotlib.pyplot as plt
-from element import edgeEvent,TP_edgeEvent
+from element import edgeEvent,TP_edgeEvent, Edge
 import math
 
 
@@ -20,7 +20,7 @@ class Visualizer:
     def set_file(self,file_name):
         self.file_name=file_name
 
-    def visualize(self,start_time,end_time):
+    def visualize(self,sourceID,start_time,end_time):
         
         con=sqlite3.connect(db_path+"\\"+self.file_name+".db")
         cur=con.cursor()
@@ -43,26 +43,40 @@ class Visualizer:
         cur.close()
         con.close()
         
+        con=sqlite3.connect(db_path+"\\"+self.file_name+"_"+sourceID+"_"+str(start_time)+"_"+str(end_time)+"_TP.db")
+        cur=con.cursor()
+        
+        
         # aggregate to static graph
         G = nx.Graph()
         for edge_event in edge_event_list:
             G.add_edge(edge_event.sourceID,edge_event.targetID)
-            
-        
-        # kamada_kawai_layout
-        # pos = nx.kamada_kawai_layout(G)
         
         # Fruchterman-Reingold 
-        # pos=nx.spring_layout(G)
+        pos=nx.spring_layout(G)
         
-        # shell layout
-        # pos = nx.shell_layout(G)
-        pos = nx.random_layout(G)
-        # pos = nx.spectral_layout(G)
         
         plt.figure(figsize=(10, 8))
         nx.draw_networkx_nodes(G, pos,node_color='black',node_size=2,alpha=0.5)
         nx.draw_networkx_edges(G, pos,edge_color='black',width=1,alpha=0.3)
+        
+        
+        ### temporal paths 강조 
+        # load tp edge event
+        tp_edge_rows=cur.execute("select * from edge").fetchall()
+        tp_edge_list=[]
+        for row in tp_edge_rows:
+            tp_edge_list.append(Edge(row[0],row[1],row[2]))
+        
+        cur.close()
+        con.close()
+        
+        hilights=[]
+        for tp_edge in tp_edge_list:
+            hilight=(tp_edge.sourceID,tp_edge.targetID)
+            hilights.append(hilight)
+        
+        nx.draw_networkx_edges(G, pos, edgelist=hilights, edge_color='red', width=2)
         
         plt.show()
     

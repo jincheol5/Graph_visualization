@@ -35,8 +35,7 @@ class Analyzer:
                 break
             
             
-            if row[1]!=row[2]:
-                edge_event_list.append(edgeEvent(row[0],row[1],row[2],row[3]))
+            edge_event_list.append(edgeEvent(row[0],row[1],row[2],row[3]))
 
         cur.close()
         con.close()
@@ -53,16 +52,28 @@ class Analyzer:
         sorted_nodes = sorted(degrees, key=lambda x: degrees[x], reverse=True)
 
         # degree를 기준으로 가장 많은 엣지를 가진 노드를 찾음
-        max_degree_node = sorted_nodes[0]
-        second_degree_node=sorted_nodes[1]
-        third_degree_node=sorted_nodes[3]
+        node_1=sorted_nodes[0]
+        node_2=sorted_nodes[1]
+        node_3=sorted_nodes[2]
+        node_4=sorted_nodes[3]
+        node_5=sorted_nodes[4]
+
 
 
         print("node의 수: ", G.number_of_nodes())
         print("edge의 수: ",G.number_of_edges())
-        print("가장 많은 엣지를 가진 노드:", max_degree_node)
-        print("연결된 엣지의 개수:", degrees[max_degree_node])
-        print("두번째로 많은 엣지를 가진 노드:", second_degree_node)
-        print("연결된 엣지의 개수:", degrees[second_degree_node])
-        print("세번째로 많은 엣지를 가진 노드:", third_degree_node)
-        print("연결된 엣지의 개수:", degrees[third_degree_node])
+        
+        print("가장 많은 엣지를 가진 노드:", node_1)
+        print("연결된 엣지의 개수:", degrees[node_1])
+        
+        print("두번째로 많은 엣지를 가진 노드:", node_2)
+        print("연결된 엣지의 개수:", degrees[node_2])
+        
+        print("세번째로 많은 엣지를 가진 노드:", node_3)
+        print("연결된 엣지의 개수:", degrees[node_3])
+        
+        print("네번째로 많은 엣지를 가진 노드:", node_4)
+        print("연결된 엣지의 개수:", degrees[node_4])
+        
+        print("다섯번째로 많은 엣지를 가진 노드:", node_5)
+        print("연결된 엣지의 개수:", degrees[node_5])

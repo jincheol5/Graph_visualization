@@ -1,17 +1,13 @@
 from visualizer import Visualizer
-from graph_analysis import Analyzer
-
-
-# file_name=input("file name: ")
-# start_time=int(input("start time: "))
-# end_time=int(input("end time: "))
-# vis=Visualizer(file_name)
-# vis.visualize(start_time,end_time)
 
 
 
+# analysis=Analyzer("CollegeMsg")
+# analysis.analyze(0,1098777142)
 
+
+# analysis=Analyzer("bitcoin")
+# analysis.analyze(0,1294771313)
 
 vis=Visualizer("bitcoin")
-vis.visualize(1292838113,1294771313)
-# vis.igraph_vis(0,1263234625)
+vis.visualize(str(2559396),1289468513,1294771313)
