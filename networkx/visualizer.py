@@ -76,7 +76,7 @@ class Visualizer:
             hilight=(tp_edge.sourceID,tp_edge.targetID)
             hilights.append(hilight)
         
-        nx.draw_networkx_edges(G, pos, edgelist=hilights, edge_color='red', width=2)
+        nx.draw_networkx_edges(G, pos, edgelist=hilights, edge_color='red', width=1, alpha=0.3)
         
         plt.show()
     
